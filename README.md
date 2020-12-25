@@ -41,4 +41,4 @@ Currently only takes one URL as input but you can easily bash script for numerou
 $ for i in $(cat urls); do headi -url $i;done
 ```
 An example is provided below from the HTB machine Control:
-<a href="https://asciinema.org/a/380645" target="_blank"><img src="https://asciinema.org/a/380645.svg" /></a>
+<a href="https://asciinema.org/a/381187" target="_blank"><img src="https://asciinema.org/a/381187.svg" /></a>
