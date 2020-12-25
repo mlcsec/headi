@@ -11,6 +11,7 @@ import (
     "bufio"
     "time"
     "strconv"
+    "github.com/fatih/color"
 )
 
 var headers = []string{"X-Originating-IP","X-Forwarded-For","X-Remote-IP","X-Remote-Addr","X-Client-IP","X-Host","X-Forwarded-Host","Origin","Host"}
@@ -21,19 +22,21 @@ var to int
 
 func payloadInject() {
     timeout := time.Duration(to * 1000000)
+    g := color.New(color.FgGreen)
+    r := color.New(color.FgRed)
     var tr = &http.Transport{
-                MaxIdleConns:      30,
-                IdleConnTimeout:   time.Second,
-                DisableKeepAlives: true,
-                DialContext: (&net.Dialer{
-                        Timeout:   timeout,
-                        KeepAlive: time.Second,
-                }).DialContext,
-        }
-        client := &http.Client{
-                Transport:     tr,
-                Timeout:       timeout,
-        }
+		MaxIdleConns:      30,
+		IdleConnTimeout:   time.Second,
+		DisableKeepAlives: true,
+		DialContext: (&net.Dialer{
+			Timeout:   timeout,
+			KeepAlive: time.Second,
+		}).DialContext,
+	}
+	client := &http.Client{
+		Transport:     tr,
+		Timeout:       timeout,
+	}
 
     // open and iterate
     file, err := os.Open(pfile)
@@ -59,7 +62,9 @@ func payloadInject() {
                 continue
             }
             if breq.ContentLength != resp.ContentLength {
-                fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                g.Println("[+] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            } else {
+                r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             }
             defer resp.Body.Close()
         }
@@ -68,19 +73,21 @@ func payloadInject() {
 
 func headerInject() {
     timeout := time.Duration(to * 1000000)
+    g := color.New(color.FgGreen)
+    r := color.New(color.FgRed)
     var tr = &http.Transport{
-                MaxIdleConns:      30,
-                IdleConnTimeout:   time.Second,
-                DisableKeepAlives: true,
-                DialContext: (&net.Dialer{
-                        Timeout:   timeout,
-                        KeepAlive: time.Second,
-                }).DialContext,
-        }
-        client := &http.Client{
-                Transport:     tr,
-                Timeout:       timeout,
-        }
+		MaxIdleConns:      30,
+		IdleConnTimeout:   time.Second,
+		DisableKeepAlives: true,
+		DialContext: (&net.Dialer{
+			Timeout:   timeout,
+			KeepAlive: time.Second,
+		}).DialContext,
+	}
+	client := &http.Client{
+		Transport:     tr,
+		Timeout:       timeout,
+	}
 
     // baseline request - gauge normal response
     breq, err := http.Get(urlt)
@@ -98,7 +105,9 @@ func headerInject() {
                 continue
             }
             if breq.ContentLength != resp.ContentLength {
-                fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                g.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            } else {
+                r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             }
             defer resp.Body.Close()
         }
