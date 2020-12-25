@@ -34,12 +34,22 @@ func payloadInject() {
                 Transport:     tr,
                 Timeout:       timeout,
         }
+
+    // open and iterate
     file, err := os.Open(pfile)
     if err != nil {
         log.Fatal(err)
     }
     defer file.Close()
     scanner := bufio.NewScanner(file)
+
+    // baseline request - gauge normal response
+    breq, err := http.Get(urlt)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // loop through payload file and inject
     for scanner.Scan() {
         for _, header := range headers {
             req, err := http.NewRequest("GET",urlt, nil)
@@ -48,7 +58,9 @@ func payloadInject() {
             if err != nil {
                 continue
             }
-            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            if breq.ContentLength != resp.ContentLength {
+                fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            }
             defer resp.Body.Close()
         }
     }
@@ -69,6 +81,14 @@ func headerInject() {
                 Transport:     tr,
                 Timeout:       timeout,
         }
+
+    // baseline request - gauge normal response
+    breq, err := http.Get(urlt)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // loop through default payloads and inject
     for _, header := range headers {
         for _, i := range inject {
             req, err := http.NewRequest("GET",urlt, nil)
@@ -77,7 +97,9 @@ func headerInject() {
             if err != nil {
                 continue
             }
-            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            if breq.ContentLength != resp.ContentLength {
+                fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            }
             defer resp.Body.Close()
         }
     }
