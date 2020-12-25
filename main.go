@@ -1,14 +1,15 @@
 package main
 
 import (
-    //"net"
-    //"net/http"
+    "net"
+    "net/http"
     "fmt"
     "flag"
     "log"
     "os"
     "bufio"
-    //"time"
+    "time"
+    "strconv"
 )
 
 var headers = []string{"X-Originating-IP","X-Forwarded-For","X-Remote-IP","X-Remote-Addr","X-Client-IP","X-Host","X-Forwarded-Host","Origin","Host"}
@@ -17,29 +18,12 @@ var url string
 var pfile string
 var to int
 
-func payloadInject() {
-    file, err := os.Open(pfile)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer file.Close()
-    scanner := bufio.NewScanner(file)
-    for scanner.Scan() {
-        for _, header := range headers {
-            //fmt.Println(header+" "+scanner.Text())
-            /*Client.Header.Set(header, scanner.Text())
-            req, err := client.Get(url)
-            if err != nil {
-                continue
-            }*/
-            fmt.Println("[*] "+url+" "+header+": "+scanner.Text()+" "+"[Code: "+" "+"[Size: "+ "")
-        }
-    }
-}
+// CREATE FUNCTION TO CHECK IF THE URL IS VALID
+// MAKE GLOBAL HTTP CLIENT SO DON'T KEEP HAVING TO DO THE var tr... BITS
 
-func headerInject() {
-    //timeout := time.Duration(to * 1000000)
-    /*var tr = &http.Transport{
+func payloadInject() {
+    timeout := time.Duration(to * 1000000)
+    var tr = &http.Transport{
 		MaxIdleConns:      30,
 		IdleConnTimeout:   time.Second,
 		DisableKeepAlives: true,
@@ -48,20 +32,53 @@ func headerInject() {
 			KeepAlive: time.Second,
 		}).DialContext,
 	}
-	/*client := &http.Client{
+	client := &http.Client{
 		Transport:     tr,
 		Timeout:       timeout,
-	}*/
-
-    for _, header := range headers {
-        for _, i := range inject {
-            //fmt.Println(header+" "+i)
-            /*Client.Header.Set(header, i)
+	}
+    file, err := os.Open(pfile)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer file.Close()
+    scanner := bufio.NewScanner(file)
+    for scanner.Scan() {
+        for _, header := range headers {
             req, err := client.Get(url)
+            req.Header.Set(header, scanner.Text())
             if err != nil {
                 continue
-            }*/
-            fmt.Println("[*] "+url+" "+header+": "+i+" "+"[Code: "+" "+"[Size: "+ "")
+            }
+            fmt.Println("[*] "+"["+url+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
+            defer req.Body.Close()
+        }
+    }
+}
+
+func headerInject() {
+    timeout := time.Duration(to * 1000000)
+    var tr = &http.Transport{
+		MaxIdleConns:      30,
+		IdleConnTimeout:   time.Second,
+		DisableKeepAlives: true,
+		DialContext: (&net.Dialer{
+			Timeout:   timeout,
+			KeepAlive: time.Second,
+		}).DialContext,
+	}
+	client := &http.Client{
+		Transport:     tr,
+		Timeout:       timeout,
+	}
+    for _, header := range headers {
+        for _, i := range inject {
+            req, err := client.Get(url)
+            req.Header.Set(header, i)
+            if err != nil {
+                continue
+            }
+            fmt.Println("[*] "+"["+url+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
+            defer req.Body.Close()
         }
     }
 }
@@ -71,9 +88,15 @@ func main() {
     flag.StringVar(&pfile, "pfile","","payload file")
     flag.IntVar(&to, "t", 10000, "timeout (milliseconds)")
     flag.Parse()
+    // FIX THIS PART, COVER ALL POSSIBILITIES
+    /*if url == "" {
+        flag.PrintDefaults()
+    } else {
+        if url != "" {
+        headerInject()
+        }
+    }
     if pfile != "" {
         payloadInject()
-    } else {
-        headerInject()
-    }
+    }*/
 }
