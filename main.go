@@ -15,17 +15,9 @@ import (
 
 var headers = []string{"X-Originating-IP","X-Forwarded-For","X-Remote-IP","X-Remote-Addr","X-Client-IP","X-Host","X-Forwarded-Host","Origin","Host"}
 var inject = []string{"127.0.0.1","localhost","0.0.0.0","0","127.1","127.0.1","2130706433"}
-var url string
+var urlt string
 var pfile string
 var to int
-
-// MAKE GLOBAL HTTP CLIENT SO DON'T KEEP HAVING TO DO THE var tr... BITS
-func validateUrl(){
-    u, err := url.ParseRequestURI(url)
-    if err != nil {
-        panic(err)
-    }
-}
 
 func payloadInject() {
     timeout := time.Duration(to * 1000000)
@@ -50,12 +42,12 @@ func payloadInject() {
     scanner := bufio.NewScanner(file)
     for scanner.Scan() {
         for _, header := range headers {
-            req, err := client.Get(url)
+            req, err := client.Get(urlt)
             req.Header.Set(header, scanner.Text())
             if err != nil {
                 continue
             }
-            fmt.Println("[*] "+"["+url+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
+            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
             defer req.Body.Close()
         }
     }
@@ -78,29 +70,37 @@ func headerInject() {
 	}
     for _, header := range headers {
         for _, i := range inject {
-            req, err := client.Get(url)
+            req, err := client.Get(urlt)
             req.Header.Set(header, i)
             if err != nil {
                 continue
             }
-            fmt.Println("[*] "+"["+url+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
+            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
             defer req.Body.Close()
         }
     }
 }
 
 func main() {
-    flag.StringVar(&url, "url", "", "target URL")
+    flag.StringVar(&urlt, "url", "", "target URL")
     flag.StringVar(&pfile, "pfile","","payload file")
     flag.IntVar(&to, "t", 10000, "timeout (milliseconds)")
     flag.Parse()
-    // FIX THIS PART, COVER ALL POSSIBILITIES
-    if url == "" {
+    if urlt == "" {
         flag.PrintDefaults()
     } else {
-        validateUrl()
+        u, err := url.Parse(urlt)
+        if err != nil {
+            log.Fatal(err)
+        }
+        if u.Scheme == "" || u.Host == "" || u.Path == "" {
+            fmt.Println("Invalid URL: ",urlt)
+            os.Exit(1)
+        }
+        if pfile != "" {
+            payloadInject()
+        } else {
+            headerInject()
+        }
     }
-    //if pfile != "" {
-    //    payloadInject()
-    //}
 }
