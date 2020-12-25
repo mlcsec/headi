@@ -18,8 +18,13 @@ var url string
 var pfile string
 var to int
 
-// CREATE FUNCTION TO CHECK IF THE URL IS VALID
 // MAKE GLOBAL HTTP CLIENT SO DON'T KEEP HAVING TO DO THE var tr... BITS
+func validateUrl(){
+    u, err := url.ParseRequestURI(url)
+    if err != nil {
+        panic(err)
+    }
+}
 
 func payloadInject() {
     timeout := time.Duration(to * 1000000)
@@ -89,14 +94,12 @@ func main() {
     flag.IntVar(&to, "t", 10000, "timeout (milliseconds)")
     flag.Parse()
     // FIX THIS PART, COVER ALL POSSIBILITIES
-    /*if url == "" {
+    if url == "" {
         flag.PrintDefaults()
     } else {
-        if url != "" {
-        headerInject()
-        }
+        validateUrl()
     }
-    if pfile != "" {
-        payloadInject()
-    }*/
+    //if pfile != "" {
+    //    payloadInject()
+    //}
 }
