@@ -77,7 +77,7 @@ func headerInject() {
             if err != nil {
                 continue
             }
-            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
+            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             defer resp.Body.Close()
         }
     }
