@@ -22,18 +22,18 @@ var to int
 func payloadInject() {
     timeout := time.Duration(to * 1000000)
     var tr = &http.Transport{
-		MaxIdleConns:      30,
-		IdleConnTimeout:   time.Second,
-		DisableKeepAlives: true,
-		DialContext: (&net.Dialer{
-			Timeout:   timeout,
-			KeepAlive: time.Second,
-		}).DialContext,
-	}
-	client := &http.Client{
-		Transport:     tr,
-		Timeout:       timeout,
-	}
+                MaxIdleConns:      30,
+                IdleConnTimeout:   time.Second,
+                DisableKeepAlives: true,
+                DialContext: (&net.Dialer{
+                        Timeout:   timeout,
+                        KeepAlive: time.Second,
+                }).DialContext,
+        }
+        client := &http.Client{
+                Transport:     tr,
+                Timeout:       timeout,
+        }
     file, err := os.Open(pfile)
     if err != nil {
         log.Fatal(err)
@@ -42,13 +42,14 @@ func payloadInject() {
     scanner := bufio.NewScanner(file)
     for scanner.Scan() {
         for _, header := range headers {
-            req, err := client.Get(urlt)
+            req, err := http.NewRequest("GET",urlt, nil)
             req.Header.Set(header, scanner.Text())
+            resp, err := client.Do(req)
             if err != nil {
                 continue
             }
-            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
-            defer req.Body.Close()
+            fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+            defer resp.Body.Close()
         }
     }
 }
@@ -56,27 +57,28 @@ func payloadInject() {
 func headerInject() {
     timeout := time.Duration(to * 1000000)
     var tr = &http.Transport{
-		MaxIdleConns:      30,
-		IdleConnTimeout:   time.Second,
-		DisableKeepAlives: true,
-		DialContext: (&net.Dialer{
-			Timeout:   timeout,
-			KeepAlive: time.Second,
-		}).DialContext,
-	}
-	client := &http.Client{
-		Transport:     tr,
-		Timeout:       timeout,
-	}
+                MaxIdleConns:      30,
+                IdleConnTimeout:   time.Second,
+                DisableKeepAlives: true,
+                DialContext: (&net.Dialer{
+                        Timeout:   timeout,
+                        KeepAlive: time.Second,
+                }).DialContext,
+        }
+        client := &http.Client{
+                Transport:     tr,
+                Timeout:       timeout,
+        }
     for _, header := range headers {
         for _, i := range inject {
-            req, err := client.Get(urlt)
+            req, err := http.NewRequest("GET",urlt, nil)
             req.Header.Set(header, i)
+            resp, err := client.Do(req)
             if err != nil {
                 continue
             }
             fmt.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(req.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(req.ContentLength))+"]")
-            defer req.Body.Close()
+            defer resp.Body.Close()
         }
     }
 }
