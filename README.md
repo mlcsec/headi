@@ -18,7 +18,7 @@ Injects the following HTTP headers:
 * Origin
 * Host
 
-First makes a baseline request to gauge the normal response for the target resource, if the response differs then the URL, header, payload, status code, and content length is returned.
+An initial baseline request is made to gauge the normal response for the target resource.  Green indicates a change in the response and red no change.  `[+]` and `[-]` respectively.
 
 
 ## Examples
