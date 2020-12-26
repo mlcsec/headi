@@ -23,7 +23,7 @@ Injects the following HTTP headers:
 An initial baseline request is made to gauge the normal response for the target resource.  Green indicates a change in the response and red no change.  `[+]` and `[-]` respectively.
 
 
-## Examples
+## Info
 Two options for HTTP header injection:
 
 1. Default payloads (127.0.0.1, localhost, etc.) are injected into the headers mentioned above
