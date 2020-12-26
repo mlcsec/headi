@@ -1,5 +1,7 @@
 # headi
-Customisable and automated HTTP header injection
+Customisable and automated HTTP header injection.  Example run from the HTB machine Control:
+
+<a href="https://asciinema.org/a/381187" target="_blank"><img src="https://asciinema.org/a/381187.svg" /></a>
 
 ## Install
 ```
@@ -40,5 +42,3 @@ Currently only takes one URL as input but you can easily bash script for numerou
 ```
 $ for i in $(cat urls); do headi -url $i;done
 ```
-An example is provided below from the HTB machine Control:
-<a href="https://asciinema.org/a/381187" target="_blank"><img src="https://asciinema.org/a/381187.svg" /></a>
