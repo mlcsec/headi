@@ -14,7 +14,7 @@ import (
     "github.com/fatih/color"
 )
 
-var headers = []string{"X-Originating-IP","X-Forwarded-For","X-Remote-IP","X-Remote-Addr","X-Client-IP","X-Host","X-Forwarded-Host","Origin","Host"}
+var headers = []string{"Client-IP","Connection","Contact","Forwarded","From","Host","Origin","Referer","True-Client-IP","Real-Client-IP","X-Client-IP","X-Custom-IP-Authorization","X-Forward-For","X-Forwarded-For","X-Forwarded-Host","X-Forwarded-Server","X-Host","X-Original-URL","X-Originating-IP","X-Real-IP","X-Remote-Addr","X-Remote-IP","X-Rewrite-URL","X-Wap-Profile"}
 var inject = []string{"127.0.0.1","localhost","0.0.0.0","0","127.1","127.0.1","2130706433"}
 var urlt string
 var pfile string
