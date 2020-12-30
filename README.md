@@ -5,10 +5,14 @@ Customisable and automated HTTP header injection.  Example run from the HTB mach
 
 TLS `InsecureSkipVerify` is not currently configured, if you want to disable security checks then feel free to uncomment `crypto/tls` in the imports and the `TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},` lines in http transport configuration and then build locally.
 
+<br>
+
 ## Install
 ```
 go get github.com/mlcsec/headi
 ```
+
+<br>
 
 ## Headers
 Injects the following HTTP headers:
@@ -24,8 +28,9 @@ Injects the following HTTP headers:
 
 An initial baseline request is made to gauge the normal response for the target resource.  Green indicates a change in the response and red no change.  `[+]` and `[-]` respectively.
 
+<br>
 
-## Info
+## Usage
 Two options for HTTP header injection:
 
 1. Default payloads (127.0.0.1, localhost, etc.) are injected into the headers mentioned above
