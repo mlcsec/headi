@@ -1,9 +1,11 @@
+// Comment out crypto/tls and TLSClient configs if you don't want to ignore insecure certs
 package main
 
 import (
     "net"
     "net/http"
     "net/url"
+    //"crypto/tls"
     "fmt"
     "flag"
     "log"
@@ -28,6 +30,7 @@ func payloadInject() {
 		MaxIdleConns:      30,
 		IdleConnTimeout:   time.Second,
 		DisableKeepAlives: true,
+        //TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},
 		DialContext: (&net.Dialer{
 			Timeout:   timeout,
 			KeepAlive: time.Second,
@@ -55,7 +58,7 @@ func payloadInject() {
     // loop through payload file and inject
     for scanner.Scan() {
         for _, header := range headers {
-            req, err := http.NewRequest("GET",urlt, nil)
+            req, err := http.NewRequest("GET", urlt, nil)
             req.Header.Set(header, scanner.Text())
             resp, err := client.Do(req)
             if err != nil {
@@ -79,6 +82,7 @@ func headerInject() {
 		MaxIdleConns:      30,
 		IdleConnTimeout:   time.Second,
 		DisableKeepAlives: true,
+        //TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},
 		DialContext: (&net.Dialer{
 			Timeout:   timeout,
 			KeepAlive: time.Second,
@@ -98,7 +102,7 @@ func headerInject() {
     // loop through default payloads and inject
     for _, header := range headers {
         for _, i := range inject {
-            req, err := http.NewRequest("GET",urlt, nil)
+            req, err := http.NewRequest("GET", urlt, nil)
             req.Header.Set(header, i)
             resp, err := client.Do(req)
             if err != nil {
@@ -114,13 +118,29 @@ func headerInject() {
     }
 }
 
+func init() {
+    flag.Usage = func() {
+        f := "Usage:\n"
+        f += "  headi -u https://target.com/resource\n"
+        f += "  headi -u https://target.com/resource -p internal_addrs.txt\n\n"
+        f += "Options:\n"
+        f += "  -p, --pfile <file>       Payload file\n"
+        f += "  -t, --timeout <millis>   HTTP Timeout\n"
+        f += "  -u, --url <url>          Target URL\n"
+        fmt.Fprintf(os.Stderr, f)
+    }
+}
+
 func main() {
-    flag.StringVar(&urlt, "url", "", "target URL")
-    flag.StringVar(&pfile, "pfile","","payload file")
-    flag.IntVar(&to, "t", 10000, "timeout (milliseconds)")
+    flag.StringVar(&urlt, "url", "", "")
+    flag.StringVar(&urlt, "u", "", "")
+    flag.StringVar(&pfile, "pfile","","")
+    flag.StringVar(&pfile, "p","","")
+    flag.IntVar(&to, "timeout", 10000, "")
+    flag.IntVar(&to, "t", 10000, "")
     flag.Parse()
     if urlt == "" {
-        flag.PrintDefaults()
+        flag.Usage()
     } else {
         u, err := url.Parse(urlt)
         if err != nil {
