@@ -3,6 +3,8 @@ Customisable and automated HTTP header injection.  Example run from the HTB mach
 
 <a href="https://asciinema.org/a/381187" target="_blank"><img src="https://asciinema.org/a/381187.svg" /></a>
 
+TLS `InsecureSkipVerify` is not currently configured, if you want to disable security checks then feel free to uncomment `crypto/tls` in the imports and the `TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},` lines in http transport configuration and then build locally.
+
 ## Install
 ```
 go get github.com/mlcsec/headi
@@ -31,12 +33,14 @@ Two options for HTTP header injection:
 
 ```
 $ headi
-  -pfile string
-    	payload file
-  -t int
-    	timeout (milliseconds) (default 10000)
-  -url string
-    	target URL
+Usage:
+  headi -u https://target.com/resource
+  headi -u https://target.com/resource -p internal_addrs.txt
+
+Options:
+  -p, --pfile <file>       Payload file
+  -t, --timeout <millis>   HTTP Timeout
+  -u, --url <url>          Target URL
 ```
 Currently only takes one URL as input but you can easily bash script for numerous URLs like so:
 ```
