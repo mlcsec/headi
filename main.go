@@ -1,4 +1,4 @@
-// Comment out crypto/tls and TLSClient configs if you don't want to ignore insecure certs
+// Comment out crypto/tls and TLSClient configs if required
 package main
 
 import (
