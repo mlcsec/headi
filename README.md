@@ -3,7 +3,7 @@ Customisable and automated HTTP header injection.  Example run from the HTB mach
 
 <a href="https://asciinema.org/a/381187" target="_blank"><img src="https://asciinema.org/a/381187.svg" /></a>
 
-TLS `InsecureSkipVerify` is not currently configured, if you want to disable security checks then feel free to uncomment `crypto/tls` in the imports and the `TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},` lines in http transport configuration and then build locally.
+`InsecureSkipVerify` is not currently configured, if you want to disable security checks then feel free to uncomment `crypto/tls` in the imports and the `TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},` lines in http transport configuration and then build locally.
 
 <br>
 
