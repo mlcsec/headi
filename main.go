@@ -109,7 +109,7 @@ func headerInject() {
                 continue
             }
             if breq.ContentLength != resp.ContentLength {
-                g.Println("[*] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                g.Println("[+] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             } else {
                 r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             }
