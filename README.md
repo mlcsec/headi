@@ -43,7 +43,7 @@ Usage:
   headi -u https://target.com/resource -p internal_addrs.txt
 
 Options:
-  -p, --pfile <file>       Payload file
+  -p, --pfile <file>       Payload File
   -t, --timeout <millis>   HTTP Timeout
   -u, --url <url>          Target URL
 ```
