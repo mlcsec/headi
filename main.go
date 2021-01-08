@@ -1,4 +1,4 @@
-// Comment out crypto/tls and TLSClient configs if required
+// uncomment crypto/tls import and TLSClient configs if required
 package main
 
 import (
@@ -65,9 +65,9 @@ func payloadInject() {
                 continue
             }
             if breq.ContentLength != resp.ContentLength {
-                g.Println("[+] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                g.Println("[+] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+"[Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             } else {
-                r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+scanner.Text()+"]"+" "+"[Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             }
             defer resp.Body.Close()
         }
@@ -109,9 +109,9 @@ func headerInject() {
                 continue
             }
             if breq.ContentLength != resp.ContentLength {
-                g.Println("[+] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                g.Println("[+] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+"[Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             } else {
-                r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+" [Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
+                r.Println("[-] "+"["+urlt+"]"+" "+"["+header+": "+i+"]"+" "+"[Code: "+strconv.Itoa(int(resp.StatusCode))+"] "+"[Size: "+ strconv.Itoa(int(resp.ContentLength))+"]")
             }
             defer resp.Body.Close()
         }
@@ -124,7 +124,7 @@ func init() {
         f += "  headi -u https://target.com/resource\n"
         f += "  headi -u https://target.com/resource -p internal_addrs.txt\n\n"
         f += "Options:\n"
-        f += "  -p, --pfile <file>       Payload file\n"
+        f += "  -p, --pfile <file>       Payload File\n"
         f += "  -t, --timeout <millis>   HTTP Timeout\n"
         f += "  -u, --url <url>          Target URL\n"
         fmt.Fprintf(os.Stderr, f)
