@@ -16,15 +16,30 @@ go get github.com/mlcsec/headi
 
 ## Headers
 Injects the following HTTP headers:
-* X-Originating-IP
-* X-Forwarded-For
-* X-Remote-IP
-* X-Remote-Addr
-* X-Client-IP
-* X-Host
-* X-Forwarded-Host
-* Origin
+* Client-IP
+* Connection
+* Contact
+* Forwarded
+* From
 * Host
+* Origin
+* Referer
+* True-Client-IP
+* X-Client-IP
+* X-Custom-IP-Authorization
+* X-Forward-For
+* X-Forwarded-For
+* X-Forwarded-Host
+* X-Forwarded-Server
+* X-Host
+* X-HTTP-Host-Override
+* X-Original-URL
+* X-Originating-IP
+* X-Real-IP
+* X-Remote-Addr
+* X-Remote-IP
+* X-Rewrite-URL
+* X-Wap-Profile
 
 An initial baseline request is made to gauge the normal response for the target resource.  Green indicates a change in the response and red no change.  `[+]` and `[-]` respectively.
 
