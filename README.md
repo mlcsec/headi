@@ -17,6 +17,14 @@ Customisable and automated HTTP header injection.  Example run from the HTB mach
 go get github.com/mlcsec/headi
 ```
 
+Or from git:
+```shell
+git clone https://github.com/mlcsec/headi.git
+make before.build
+make.build-headi
+sudo mv headi /usr/local/bin
+```
+
 <br>
 
 ## Headers
