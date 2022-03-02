@@ -2,11 +2,10 @@
 package main
 
 import (
-	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
-
 	//"crypto/tls"
 	"bufio"
 	"flag"
@@ -15,7 +14,6 @@ import (
 	"os"
 	"strconv"
 	"time"
-
 	"github.com/fatih/color"
 )
 
@@ -42,7 +40,7 @@ func ResolveContentLength(tr *http.Transport, client *http.Client, url string, h
 
 		//compute Content-Length by ourself
 		defer resp.Body.Close()
-		bodyBytes, err := io.ReadAll(resp.Body)
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return -1, err
 		}
