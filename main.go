@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	//"crypto/tls"
+	"crypto/tls"
 	"bufio"
 	"flag"
 	"fmt"
@@ -75,7 +75,7 @@ func InitBaseline() (tr *http.Transport, client *http.Client, bresp *http.Respon
 		MaxIdleConns:      30,
 		IdleConnTimeout:   time.Second,
 		DisableKeepAlives: true,
-		//TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig:   &tls.Config{InsecureSkipVerify: true},
 		DialContext: (&net.Dialer{
 			Timeout:   timeout,
 			KeepAlive: time.Second,
