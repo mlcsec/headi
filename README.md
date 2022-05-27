@@ -14,7 +14,7 @@ Customisable and automated HTTP header injection.  Example run from the HTB mach
 
 ## Install
 ```
-go get github.com/mlcsec/headi
+go install github.com/mlcsec/headi@latest
 ```
 
 Or from git:
