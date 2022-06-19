@@ -21,7 +21,7 @@ Or from git:
 ```shell
 git clone https://github.com/mlcsec/headi.git
 make before.build
-make.build-headi
+make build.headi
 sudo mv headi /usr/local/bin
 ```
 
