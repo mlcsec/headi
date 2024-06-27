@@ -7,11 +7,6 @@ Customisable and automated HTTP header injection.  Example run from the HTB mach
 
 <br>
 
-## Todo
-* add concurrency option - does run slowly on some sites
-
-<br>
-
 ## Install
 ```
 go install github.com/mlcsec/headi@latest
